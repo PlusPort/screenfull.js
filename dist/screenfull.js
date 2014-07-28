@@ -1,6 +1,6 @@
 /*!
 * screenfull
-* v1.2.0 - 2014-04-29
+* v1.2.2 - 2014-07-28
 * (c) Sindre Sorhus; MIT License
 */
 (function () {
@@ -66,7 +66,7 @@
 
 		for (; i < l; i++) {
 			val = fnMap[i];
-			if (val && val[1] in document) {
+			if (val && val[1] in top.document) {
 				for (i = 0, valLength = val.length; i < valLength; i++) {
 					ret[fnMap[0][i]] = val[i];
 				}
@@ -81,7 +81,7 @@
 		request: function (elem) {
 			var request = fn.requestFullscreen;
 
-			elem = elem || document.documentElement;
+			elem = elem || top.document.documentElement;
 
 			// Work around Safari 5.1 bug: reports support for
 			// keyboard in fullscreen even though it doesn't.
@@ -94,7 +94,7 @@
 			}
 		},
 		exit: function () {
-			document[fn.exitFullscreen]();
+			top.document[fn.exitFullscreen]();
 		},
 		toggle: function (elem) {
 			if (this.isFullscreen) {
@@ -121,29 +121,29 @@
 	Object.defineProperties(screenfull, {
 		isFullscreen: {
 			get: function () {
-				return !!document[fn.fullscreenElement];
+				return !!top.document[fn.fullscreenElement];
 			}
 		},
 		element: {
 			enumerable: true,
 			get: function () {
-				return document[fn.fullscreenElement];
+				return top.document[fn.fullscreenElement];
 			}
 		},
 		enabled: {
 			enumerable: true,
 			get: function () {
 				// Coerce to boolean in case of old WebKit
-				return !!document[fn.fullscreenEnabled];
+				return !!top.document[fn.fullscreenEnabled];
 			}
 		}
 	});
 
-	document.addEventListener(fn.fullscreenchange, function (e) {
+	top.document.addEventListener(fn.fullscreenchange, function (e) {
 		screenfull.onchange.call(screenfull, e);
 	});
 
-	document.addEventListener(fn.fullscreenerror, function (e) {
+	top.document.addEventListener(fn.fullscreenerror, function (e) {
 		screenfull.onerror.call(screenfull, e);
 	});
 
